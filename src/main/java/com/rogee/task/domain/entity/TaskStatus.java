@@ -1,4 +1,4 @@
-package domain.entity;
+package com.rogee.task.domain.entity;
 
 public enum TaskStatus {
     OPEN,
