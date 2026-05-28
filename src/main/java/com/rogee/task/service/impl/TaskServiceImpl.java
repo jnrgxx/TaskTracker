@@ -1,8 +1,10 @@
 package com.rogee.task.service.impl;
 
 import com.rogee.task.domain.CreateTaskRequest;
+import com.rogee.task.domain.UpdateTaskRequest;
 import com.rogee.task.domain.entity.Task;
 import com.rogee.task.domain.entity.TaskStatus;
+import com.rogee.task.exception.TaskNotFoundException;
 import com.rogee.task.repository.TaskRepository;
 import com.rogee.task.service.TaskService;
 import org.springframework.data.domain.Sort;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @Service // specialized version of @Component, descriptive
 public class TaskServiceImpl implements TaskService {
@@ -43,5 +46,19 @@ public class TaskServiceImpl implements TaskService {
     public List<Task> listTasks() {
         // list  all tasks in Ascending Order: Newest Higher, Older Lowest
         return taskRepository.findAll(Sort.by(Sort.Direction.ASC, "created"));
+    }
+
+    @Override
+    public Task updateTask(UUID taskId, UpdateTaskRequest request) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
+
+        task.setTitle(request.title());
+        task.setDescription(request.description());
+        task.setDueDate(request.dueDate());
+        task.setStatus(request.status());
+        task.setPriority(request.priority());
+        task.setUpdated(Instant.now());
+
+        return taskRepository.save(task);
     }
 }

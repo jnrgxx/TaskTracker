@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository // sub-class of @Components, similar but more descriptive
 public interface TaskRepository extends JpaRepository<Task, UUID> {
-
+    
 }
