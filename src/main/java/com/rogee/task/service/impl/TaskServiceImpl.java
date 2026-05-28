@@ -5,9 +5,11 @@ import com.rogee.task.domain.entity.Task;
 import com.rogee.task.domain.entity.TaskStatus;
 import com.rogee.task.repository.TaskRepository;
 import com.rogee.task.service.TaskService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service // specialized version of @Component, descriptive
 public class TaskServiceImpl implements TaskService {
@@ -35,5 +37,11 @@ public class TaskServiceImpl implements TaskService {
         );
 
         return taskRepository.save(task);
+    }
+
+    @Override
+    public List<Task> listTasks() {
+        // list  all tasks in Ascending Order: Newest Higher, Older Lowest
+        return taskRepository.findAll(Sort.by(Sort.Direction.ASC, "created"));
     }
 }
